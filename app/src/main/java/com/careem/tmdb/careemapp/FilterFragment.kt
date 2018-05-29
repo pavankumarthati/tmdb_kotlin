@@ -1,8 +1,6 @@
 package com.careem.tmdb.careemapp
 
-import android.arch.persistence.room.util.StringUtil
 import android.content.Context
-import android.net.Uri
 import android.os.Bundle
 import android.support.constraint.ConstraintLayout
 import android.support.v4.app.Fragment
@@ -14,7 +12,6 @@ import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.RadioGroup
 import android.widget.TextView
-import kotlinx.android.synthetic.main.movie_filters.*
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -37,8 +34,7 @@ const val RELEASE_DATE_LTE = "release_date_lte"
 
 class FilterFragment : Fragment() {
 
-    private var initialFilterMap: HashMap<String, String>? = null
-    private var changedFilterMap: HashMap<String, String>? = null
+    private var filterMap: HashMap<String, String>? = null
     private var resetFilterMap: HashMap<String, String>? = null
     private var listener: OnFiltersChangedListener? = null
 
@@ -72,7 +68,7 @@ class FilterFragment : Fragment() {
                 this[it] = input.get(it) as String
             }
         }
-        initialFilterMap = resetFilterMap
+        filterMap = resetFilterMap
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -116,21 +112,38 @@ class FilterFragment : Fragment() {
         }
 
         confirmBtn.setOnClickListener(object: View.OnClickListener {
+
             override fun onClick(v: View?) {
                 updateFilterMap()
             }
 
         })
+
+        resetBtn.setOnClickListener {
+            filterMap = resetFilterMap
+            sortByView?.clearCheck()
+            when(filterMap?.get(SORT_BY)) {
+                RELEASE_DATE_ASC -> {
+                    (sortByView?.findViewById(R.id.releaseDateAsc) as AppCompatRadioButton).isChecked = true
+                }
+                RELEASE_DATE_DESC -> {
+                    (sortByView?.findViewById(R.id.releaseDateDesc) as AppCompatRadioButton).isChecked = true
+                }
+            }
+
+            (moviefilterView?.findViewById(R.id.releaseDateLte) as TextView).text = filterMap?.get(RELEASE_DATE_LTE)
+            (moviefilterView?.findViewById(R.id.releaseDateGte) as TextView).text = filterMap?.get(RELEASE_DATE_GTE)
+        }
     }
 
     private fun updateFilterMap() {
         sortByView?.let {
             when(it.checkedRadioButtonId) {
                 R.id.releaseDateDesc -> {
-                    initialFilterMap?.put(SORT_BY, RELEASE_DATE_DESC)
+                    filterMap?.put(SORT_BY, RELEASE_DATE_DESC)
                 }
                 else -> {
-                    initialFilterMap?.put(SORT_BY, RELEASE_DATE_ASC)
+                    filterMap?.put(SORT_BY, RELEASE_DATE_ASC)
                 }
             }
         }
@@ -140,34 +153,31 @@ class FilterFragment : Fragment() {
             val releaseDateGte: CharSequence = (it.findViewById(R.id.releaseDateGte) as TextView).text
             when {
                 releaseDateLte.isNotEmpty() -> {
-                    initialFilterMap?.put(RELEASE_DATE_LTE, releaseDateLte.toString())
+                    filterMap?.put(RELEASE_DATE_LTE, releaseDateLte.toString())
                 }
                 releaseDateGte.isNotEmpty() -> {
-                    initialFilterMap?.put(RELEASE_DATE_GTE, releaseDateGte.toString())
+                    filterMap?.put(RELEASE_DATE_GTE, releaseDateGte.toString())
                 }
                 else -> {}
             }
         }
-        listener?.onFiltersChanged(initialFilterMap!!)
+        listener?.onFiltersChanged(filterMap!!)
     }
 
     private fun initializeSortingView(context: Context?) {
         context?.let {
             val layoutInflater = LayoutInflater.from(context)
             sortByView = layoutInflater.inflate(R.layout.sort_filters, filterContentFrame, false) as RadioGroup
-            when(initialFilterMap?.get(SORT_BY)) {
+            when(filterMap?.get(SORT_BY)) {
                 RELEASE_DATE_DESC -> {
-                    (sortByView!!.getChildAt(0) as AppCompatRadioButton).isChecked = true
-                    changedFilterMap?.set(SORT_BY, RELEASE_DATE_DESC)
+                    (sortByView!!.findViewById(R.id.releaseDateDesc) as AppCompatRadioButton).isChecked = true
                 }
                 RELEASE_DATE_ASC -> {
-                    ((sortByView!!).getChildAt(1) as AppCompatRadioButton).isChecked = true
-                    changedFilterMap?.set(SORT_BY, RELEASE_DATE_ASC)
+                    ((sortByView!!).findViewById(R.id.releaseDateAsc) as AppCompatRadioButton).isChecked = true
                 }
                 else -> {
-                    (sortByView!!.getChildAt(0) as AppCompatRadioButton).isChecked = true
-                    changedFilterMap?.set(RELEASE_DATE_DESC, formatToSimpleDate(Date()))
-                    initialFilterMap?.set(RELEASE_DATE_DESC, formatToSimpleDate(Date()))
+                    (sortByView!!.findViewById(R.id.releaseDateDesc) as AppCompatRadioButton).isChecked = true
+                    filterMap?.set(RELEASE_DATE_DESC, formatToSimpleDate(Date()))
                 }
             }
         }
@@ -177,11 +187,11 @@ class FilterFragment : Fragment() {
         context?.let {
             val layoutInflater = LayoutInflater.from(context)
             moviefilterView = layoutInflater.inflate(R.layout.movie_filters, filterContentFrame, false) as ConstraintLayout
-            if (initialFilterMap?.containsKey(RELEASE_DATE_LTE) == true) {
-                (moviefilterView?.findViewById(R.id.releaseDateLte) as TextView).text = initialFilterMap?.get(RELEASE_DATE_LTE) as String
+            if (filterMap?.containsKey(RELEASE_DATE_LTE) == true) {
+                (moviefilterView?.findViewById(R.id.releaseDateLte) as TextView).text = filterMap?.get(RELEASE_DATE_LTE) as String
             }
-            if (initialFilterMap?.containsKey(RELEASE_DATE_GTE) == true) {
-                (moviefilterView?.findViewById(R.id.releaseDateGte) as TextView).text = initialFilterMap?.get(RELEASE_DATE_GTE) as String
+            if (filterMap?.containsKey(RELEASE_DATE_GTE) == true) {
+                (moviefilterView?.findViewById(R.id.releaseDateGte) as TextView).text = filterMap?.get(RELEASE_DATE_GTE) as String
             }
         }
     }
