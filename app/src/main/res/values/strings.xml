@@ -14,4 +14,5 @@
   <string name="release_date_lte">Release Date LTE</string>
   <string name="release_date_hint">yyyy-mm-dd</string>
   <string name="release_date_gte">Release Date Gte</string>
+  <string name="movie_detail_title">Title</string>
 </resources>

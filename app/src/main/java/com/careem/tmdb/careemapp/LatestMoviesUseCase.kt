@@ -9,7 +9,7 @@ public class LatestMoviesUseCase(var tmdbRepository: TmdbRepository, var schedul
     @SuppressWarnings("unchecked")
     override fun executeUseCase(input: Input?): Observable<Output>? {
         return input?.let {
-            tmdbRepository.getLatestMovieDetail(it.page, it.filters)
+            tmdbRepository.getLatestMovies(it.page, it.filters)
                     .compose(mapResponseToOutput())
                     .composeX(scheduler) as Observable<Output>
 
@@ -49,8 +49,5 @@ public class LatestMoviesUseCase(var tmdbRepository: TmdbRepository, var schedul
     data class Output(var items: Array<LatestMovieItem>)
 }
 
-private fun  <T> Observable<T>.composeX(arg: ObservableTransformer<in Any, out Any>): Observable<out Any> {
-    return Observable.wrap(arg.apply(this))
-}
 
 

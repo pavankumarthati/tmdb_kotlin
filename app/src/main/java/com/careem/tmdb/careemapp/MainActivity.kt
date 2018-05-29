@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 const val FILTER_FRAGMENT_TAG: String = "filter_frag_tag"
+const val MOVIE_DETAIL_FRAG_TAG = "movie_detail_frag_tag"
 
 class MainActivity : AppCompatActivity(), MainContentFragment.OnFragmentInteractionListener, FilterFragment.OnFiltersChangedListener {
 
@@ -44,6 +45,15 @@ class MainActivity : AppCompatActivity(), MainContentFragment.OnFragmentInteract
     override fun onFiltersChanged(map: HashMap<String, String>) {
         supportFragmentManager.popBackStack()
         mainContent?.applyFilters(map)
+    }
+
+    override fun onItemClicked(id: Long) {
+        val movieDetailFragment = MovieDetailFragment.getInstance(id)
+        supportFragmentManager.beginTransaction().apply {
+            this.add(R.id.content_holder, movieDetailFragment, MOVIE_DETAIL_FRAG_TAG)
+            this.addToBackStack(null)
+            this.commit()
+        }
     }
 
 }

@@ -106,12 +106,8 @@ class MainContentFragment : Fragment() {
         activity?.let {
             latestMoviesRv.addOnItemTouchListener(RecyclerViewItemClickListener(it, object: ClickHandler {
                 override fun onClick(view: View, position: Int) {
-                    /*
-                    val latestMovieItem: LatestMovieItem? = latestMoviesRv.getChildViewHolder(view).itemView.getTag() as? LatestMovieItem
-                    Intent intent = new Intent(it, MovieDetailActivity.class);
-                    intent.putExtra(MOVIE_ID_EXTRA, homeMovieItem.id);
-                    startActivity(intent);
-                    */
+                    val latestMovieItem: LatestMovieItem = latestMoviesRv.getChildViewHolder(view).itemView.tag as LatestMovieItem
+                    listener?.onItemClicked(latestMovieItem.id)
                 }
             }))
         }
@@ -143,6 +139,7 @@ class MainContentFragment : Fragment() {
      */
     interface OnFragmentInteractionListener {
         fun onFilterClicked()
+        fun onItemClicked(id: Long)
     }
 
     companion object {

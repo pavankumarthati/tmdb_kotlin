@@ -7,7 +7,7 @@ import retrofit2.http.QueryMap
 
 interface LatestMovieApi {
     @GET("3/discover/movie")
-    fun getLatestMovieDetail(@Query("page") page: Long,
-                             @QueryMap filters: Map<String, String>?): Observable<LatestMoviesResponse>
+    fun getLatestMovies(@Query("page") page: Long,
+                        @QueryMap filters: Map<String, String>?): Observable<LatestMoviesResponse>
 
 }

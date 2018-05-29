@@ -44,7 +44,7 @@ class FilterFragment : Fragment() {
     private lateinit var resetBtn: Button
     private lateinit var filterContentFrame: FrameLayout
     private var sortByView: RadioGroup? = null
-    private var moviefilterView: ConstraintLayout? = null
+    private var movieFilterView: ConstraintLayout? = null
 
 
     override fun onAttach(context: Context) {
@@ -62,15 +62,6 @@ class FilterFragment : Fragment() {
         populateData(arguments!!)
     }
 
-    private fun populateData(input: Bundle): Unit {
-        resetFilterMap = HashMap<String, String>().apply {
-            input.keySet().forEach {
-                this[it] = input.get(it) as String
-            }
-        }
-        filterMap = resetFilterMap
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val rootView: View = inflater.inflate(R.layout.fragment_filter, container, false)
@@ -79,7 +70,7 @@ class FilterFragment : Fragment() {
         confirmBtn = rootView.findViewById(R.id.confirm_btn)
         resetBtn = rootView.findViewById(R.id.reset_btn)
         filterContentFrame = rootView.findViewById(R.id.filter_content)
-        initializeSortingView(context)
+        initializeSortView(context)
         initializeFilterView(context)
         filterContentFrame.addView(sortByView)
         sortByTv.isSelected = true
@@ -106,7 +97,7 @@ class FilterFragment : Fragment() {
                     filterContentFrame.removeAllViews()
                     sortByTv.isSelected = false
                     filterByTv.isSelected = true
-                    filterContentFrame.addView(moviefilterView)
+                    filterContentFrame.addView(movieFilterView)
                 }
             }
         }
@@ -131,9 +122,18 @@ class FilterFragment : Fragment() {
                 }
             }
 
-            (moviefilterView?.findViewById(R.id.releaseDateLte) as TextView).text = filterMap?.get(RELEASE_DATE_LTE)
-            (moviefilterView?.findViewById(R.id.releaseDateGte) as TextView).text = filterMap?.get(RELEASE_DATE_GTE)
+            (movieFilterView?.findViewById(R.id.releaseDateLte) as TextView).text = filterMap?.get(RELEASE_DATE_LTE)
+            (movieFilterView?.findViewById(R.id.releaseDateGte) as TextView).text = filterMap?.get(RELEASE_DATE_GTE)
         }
+    }
+
+    private fun populateData(input: Bundle): Unit {
+        resetFilterMap = HashMap<String, String>().apply {
+            input.keySet().forEach {
+                this[it] = input.get(it) as String
+            }
+        }
+        filterMap = resetFilterMap
     }
 
     private fun updateFilterMap() {
@@ -148,7 +148,7 @@ class FilterFragment : Fragment() {
             }
         }
 
-        moviefilterView?.let {
+        movieFilterView?.let {
             val releaseDateLte: CharSequence = (it.findViewById(R.id.releaseDateLte) as TextView).text
             val releaseDateGte: CharSequence = (it.findViewById(R.id.releaseDateGte) as TextView).text
             when {
@@ -164,7 +164,7 @@ class FilterFragment : Fragment() {
         listener?.onFiltersChanged(filterMap!!)
     }
 
-    private fun initializeSortingView(context: Context?) {
+    private fun initializeSortView(context: Context?) {
         context?.let {
             val layoutInflater = LayoutInflater.from(context)
             sortByView = layoutInflater.inflate(R.layout.sort_filters, filterContentFrame, false) as RadioGroup
@@ -186,12 +186,12 @@ class FilterFragment : Fragment() {
     private fun initializeFilterView(context: Context?) {
         context?.let {
             val layoutInflater = LayoutInflater.from(context)
-            moviefilterView = layoutInflater.inflate(R.layout.movie_filters, filterContentFrame, false) as ConstraintLayout
+            movieFilterView = layoutInflater.inflate(R.layout.movie_filters, filterContentFrame, false) as ConstraintLayout
             if (filterMap?.containsKey(RELEASE_DATE_LTE) == true) {
-                (moviefilterView?.findViewById(R.id.releaseDateLte) as TextView).text = filterMap?.get(RELEASE_DATE_LTE) as String
+                (movieFilterView?.findViewById(R.id.releaseDateLte) as TextView).text = filterMap?.get(RELEASE_DATE_LTE) as String
             }
             if (filterMap?.containsKey(RELEASE_DATE_GTE) == true) {
-                (moviefilterView?.findViewById(R.id.releaseDateGte) as TextView).text = filterMap?.get(RELEASE_DATE_GTE) as String
+                (movieFilterView?.findViewById(R.id.releaseDateGte) as TextView).text = filterMap?.get(RELEASE_DATE_GTE) as String
             }
         }
     }
@@ -201,30 +201,12 @@ class FilterFragment : Fragment() {
         listener = null
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     *
-     *
-     * See the Android Training lesson [Communicating with Other Fragments]
-     * (http://developer.android.com/training/basics/fragments/communicating.html)
-     * for more information.
-     */
     interface OnFiltersChangedListener {
         fun onFiltersChanged(map: HashMap<String, String>)
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment FilterFragment.
-         */
+
         @JvmStatic
         fun newInstance(filters: Map<String, String>) = FilterFragment().apply {
             arguments = Bundle().apply {

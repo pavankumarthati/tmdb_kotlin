@@ -15,11 +15,15 @@ class DataSourceModule {
 
     @Provides
     @Singleton
+    fun providesMovieDetailApi(retrofit: Retrofit) = retrofit.create(MovieDetailApi::class.java)
+
+    @Provides
+    @Singleton
     fun providesConfigurationApi(retrofit: Retrofit) = retrofit.create(ConfigurationApi::class.java)
 
     @Provides
     @Singleton
-    fun providesTmdbRepository(latestMovieApi: LatestMovieApi, configurationApi: ConfigurationApi,
-    sharedPreferences: SharedPreferences) = TmdbRepository.getInstance(latestMovieApi, configurationApi, sharedPreferences)
+    fun providesTmdbRepository(latestMovieApi: LatestMovieApi, movieDetailApi: MovieDetailApi, configurationApi: ConfigurationApi,
+    sharedPreferences: SharedPreferences) = TmdbRepository.getInstance(latestMovieApi, movieDetailApi, configurationApi, sharedPreferences)
 
 }

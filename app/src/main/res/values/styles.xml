@@ -8,4 +8,28 @@
     <item name="colorAccent">@color/colorAccent</item>
   </style>
 
+  <style name="heading.home" parent="@style/TextAppearance.AppCompat.Title">
+    <item name="android:textColor">@android:color/white</item>
+    <item name="android:background">@color/colorPrimary</item>
+  </style>
+
+  <style name="title.home" parent="@style/TextAppearance.AppCompat.Title">
+    <item name="titleTextColor">@android:color/white</item>
+    <item name="android:background">@color/colorPrimary</item>
+  </style>
+
+  <style name="expanded.title.detail" parent="@style/TextAppearance.AppCompat.Headline">
+    <item name="android:textColor">@android:color/white</item>
+    <item name="android:background">@color/colorPrimary</item>
+  </style>
+
+  <style name="collapsed.title.detail" parent="@style/TextAppearance.AppCompat.Title">
+    <item name="android:textColor">@android:color/white</item>
+    <item name="android:background">@color/colorPrimary</item>
+  </style>
+
+  <style name="circleImageView.initial" parent="@style/TextAppearance.AppCompat.Large">
+    <item name="android:textSize">32sp</item>
+  </style>
+
 </resources>
