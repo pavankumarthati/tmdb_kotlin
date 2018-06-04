@@ -4,13 +4,13 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
 xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
-tools:context=".MainActivity">
+tools:context=".views.MainActivity">
 
 <android.support.v7.widget.RecyclerView
   android:id="@+id/moviesRv"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  tools:context=".MainContentFragment"
+  tools:context=".views.MainContentFragment"
   android:background="@color/grey_percent_90"
   />
 
@@ -18,10 +18,11 @@ tools:context=".MainActivity">
   android:id="@+id/show_filter_fab"
   android:layout_width="wrap_content"
   android:layout_height="wrap_content"
-  android:layout_gravity="bottom|right"
+  android:layout_gravity="end|bottom"
   android:layout_margin="16dp"
   app:fabSize="normal"
-  android:src="@mipmap/filter_outline"
+  android:src="@drawable/filter_outline"
+  app:rippleColor="@color/black_translucent_60"
   />
 
 </android.support.design.widget.CoordinatorLayout>

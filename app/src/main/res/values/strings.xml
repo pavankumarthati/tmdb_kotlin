@@ -15,4 +15,8 @@
   <string name="release_date_hint">yyyy-mm-dd</string>
   <string name="release_date_gte">Release Date Gte</string>
   <string name="movie_detail_title">Title</string>
+  <string name="release_date_val">%1$d-%2$d-%3$d</string>
+  <string name="error_msg_date_validate">releaseDateGte should be greater than releaseDateLte</string>
+  <string name="release_date">Release Date %1$s</string>
+  <string name="revenue">Revenue %1$d</string>
 </resources>
